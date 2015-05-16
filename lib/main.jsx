@@ -10,29 +10,165 @@ let content = document.getElementById('content');
 let Main = React.createClass({
 
     getInitialState() {
-        return {
-            size: this.props.size,
-            squareSize: this.props.squareSize
-        };
+        return this._initGame();
     },
 
     render() {
-        return <div>
-            <Controls control={this}/>
-            <Board size={this.state.size} squareSize={this.state.squareSize}/>
-        </div>;
+        return (<div>
+                <Controls control={this}/>
+                <Board size={this.state.size} 
+                squareSize={this.state.squareSize}
+                arrows={this.state.arrows}
+                activeSquare={this.state.activeSquare} />
+                </div>);
     },
 
-    play() {
+    _initGame() {
+        let boardData = this._initBoard();
+        return {
+            size: this.props.size,
+            squareSize: this.props.squareSize,
+            arrows: boardData[0],
+            activeSquare: boardData[1],
+            previous: [],
+        }; 
+    },
+
+    _initBoard() {
+        let arrows = new Array(this.props.size);
+        for (let i = 0; i < this.props.size; i++){
+            arrows[i] = new Array(this.props.size);
+        }
+
+        for(let i = 0; i < this.props.size; i++) {
+            for(let j = 0; j < this.props.size; j++) {
+                let rand = Math.floor((Math.random() * 4) + 1);
+                let direction = null;
+                
+                switch(rand) {
+                case 1:
+                    direction = 'arrow-up';
+                    break;
+                case 2:
+                    direction = 'arrow-right';
+                    break;
+                case 3:
+                    direction = 'arrow-down';
+                    break;
+                default:
+                    direction = 'arrow-left';
+                    break;
+                }
+                arrows[i][j] = direction;
+            }
+        }
+
+        let row = Math.floor((Math.random() * this.props.size));
+        let col = Math.floor((Math.random() * this.props.size));
+        let activeSquare = [row, col];
+        console.log("AS: " + [col, row]);
+        
+        return [arrows, activeSquare];
+    },
+
+    _tryMove() {
+        let r = this.state.activeSquare[0];
+        let c = this.state.activeSquare[1];
+        let direction = this.state.arrows[r][c];
+
+        console.log('DIR: ' + direction);
+        switch(direction) {
+        case 'arrow-up':
+            r--;
+            break;
+        case 'arrow-right':
+            c++;
+            break;
+        case 'arrow-down':
+            r++;
+            break;
+        case 'arrow-left':
+            c--;
+            break;
+        default:
+            console.log('Invalid direction...');
+        }
+        console.log('R: ' + c + ' C: ' + r);
+        return [r, c];
+    },
+
+    _checkSquare(square) {
+        let r = square[0];
+        let c = square[1];
+        
+        if ((r < 0 || r >= this.state.size) ||
+            (c < 0 || c >= this.state.size)) {
+            return false;
+        }
+        return true;
+    },
+
+    _containsCycle(square) {
+        if (this.state.previous.length > 0) {
+            return this.state.previous.every(
+                function(element, index, array) {
+                    if (element[0] === square[0] &&
+                        element[1] === square[1]) {
+                        return false;
+                    }
+                    return true;
+                });
+        }
+        return true;
+    },
+
+    _move() {
+        let possibleSquare = this._tryMove();
+
+        if (!this._containsCycle(possibleSquare)){
+            return 'cycle';
+        }
+        if (this._checkSquare(possibleSquare)) {
+            this.state.previous.push(this.state.activeSquare);
+            this.state.activeSquare = possibleSquare;
+            return 'move';
+        } else { 
+            return 'off';
+        }
+    },
+
+    _play() {
+        console.log('Game loop active...');
+        let result = this._move();
+        switch(result) {
+        case 'cycle':
+            this.stop();
+            alert('Checker has entered a cycle, it will never go off the board');
+            break;
+        case 'off':
+            this.stop();
+            alert('The checker went off the board...  :(');
+            break;
+        default:
+            this.setState(this.state);
+        }        
+    },
+
+    play() {        
         console.log("Play");
+        this.state.gameLoop = setInterval(this._play, 2000);
     },
 
     stop() {
         console.log("Stop");
+        clearInterval(this.state.gameLoop);
+        console.log('Game loop stopped...');
     },
 
     reset() {
         console.log("Reset");
+        let gameData = this._initGame();
+        this.setState(gameData);
     },
 
     setSize() {
@@ -41,7 +177,8 @@ let Main = React.createClass({
         //setting our state forces a rerender, which in turn will call the render() method
         //of this class. This is how everything gets redrawn and how you 'react' to user input
         //to change the state of the DOM.
-        this.setState(this.state);
+        this.reset();
+        // this.setState(this.state);
     }
 });
 

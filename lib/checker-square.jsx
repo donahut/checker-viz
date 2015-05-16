@@ -31,35 +31,24 @@ export default React.createClass({
       height: this.props.size,
       color: 'yellow',
       backgroundColor: this.props.color,
-      fontSize: '24pt'
-    }
+      fontSize: '24pt',
+      textAlign: 'center',
+      lineHeight: this.props.size + 'px'
+    };
 
-    let rand = Math.floor((Math.random() * 4) + 1);
-    let direction = null;
-
-    //console.log('RAND: ' + rand);
-
-    if (rand == 1) {
-      direction = 'arrow-up';
-    } else if (rand == 2) {
-      direction = 'arrow-right';
-    } else if (rand == 3) {
-      direction = 'arrow-down';
-    } else {
-      direction = 'arrow-left';
-    }
-
-
-    /* let classString = 'Glyphicon' + {direction} */
-    //console.log('DIRECTION: ' + direction);
+    let direction = this.props.direction;
 
     //To set a div's class in React you must use the 'className' attribute, instead of the
     //usual 'class' attribute. This is because 'class' is a reserved keyword in ECMAScript 6.
-    return <div className='square' ref='square' style={style}>
-  <Button className='disabled' style={arrowStyle}>
-    <Glyphicon glyph={direction} />
-  </Button>
-    </div>;
+    if (this.props.direction != null) {
+      return <div className='square' ref='square' style={style}>
+          <div style={arrowStyle}>
+            <Glyphicon glyph={direction} />
+          </div>
+        </div>;
+    } else {
+      return <div className='square' ref='square' style={style} />;
+    }
   },
 
   /**
