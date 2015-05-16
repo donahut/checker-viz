@@ -1,6 +1,6 @@
 import React from 'react';
 //notice we use the relative path syntax when loading local files
-import Square from './example-square'
+import Square from './checker-square'
 
 export default React.createClass({
     getInitialState() {
