@@ -10,7 +10,7 @@ let content = document.getElementById('content');
 let Main = React.createClass({
 
     getInitialState() {
-        return this._initGame();
+        return this._initGame(this.props.size);
     },
 
     render() {
@@ -23,25 +23,25 @@ let Main = React.createClass({
                 </div>);
     },
 
-    _initGame() {
-        let boardData = this._initBoard();
+    _initGame(size, squareSize=this.props.squareSize) {
+        let boardData = this._initBoard(size, squareSize);
         return {
-            size: this.props.size,
-            squareSize: this.props.squareSize,
+            size: size,
+            squareSize: squareSize,
             arrows: boardData[0],
             activeSquare: boardData[1],
             previous: [],
         }; 
     },
 
-    _initBoard() {
-        let arrows = new Array(this.props.size);
-        for (let i = 0; i < this.props.size; i++){
-            arrows[i] = new Array(this.props.size);
+    _initBoard(size, squareSize) {
+        let arrows = new Array(size);
+        for (let i = 0; i < size; i++){
+            arrows[i] = new Array(size);
         }
 
-        for(let i = 0; i < this.props.size; i++) {
-            for(let j = 0; j < this.props.size; j++) {
+        for(let i = 0; i < size; i++) {
+            for(let j = 0; j < size; j++) {
                 let rand = Math.floor((Math.random() * 4) + 1);
                 let direction = null;
                 
@@ -63,8 +63,8 @@ let Main = React.createClass({
             }
         }
 
-        let row = Math.floor((Math.random() * this.props.size));
-        let col = Math.floor((Math.random() * this.props.size));
+        let row = Math.floor((Math.random() * size));
+        let col = Math.floor((Math.random() * size));
         let activeSquare = [row, col];
         console.log("AS: " + [col, row]);
         
@@ -130,6 +130,11 @@ let Main = React.createClass({
         }
         if (this._checkSquare(possibleSquare)) {
             this.state.previous.push(this.state.activeSquare);
+            let arrows = this.state.arrows;
+            let r = this.state.activeSquare[0];
+            let c = this.state.activeSquare[1];
+            arrows[r][c] = 'flag';
+            this.state.arrows = arrows;
             this.state.activeSquare = possibleSquare;
             return 'move';
         } else { 
@@ -167,18 +172,17 @@ let Main = React.createClass({
 
     reset() {
         console.log("Reset");
-        let gameData = this._initGame();
+        let gameData = this._initGame(this.state.size);
         this.setState(gameData);
     },
 
     setSize() {
         //we update our internal state.
-        this.state.size = 7;
+        let gameData = this._initGame(7);
         //setting our state forces a rerender, which in turn will call the render() method
         //of this class. This is how everything gets redrawn and how you 'react' to user input
         //to change the state of the DOM.
-        this.reset();
-        // this.setState(this.state);
+        this.setState(gameData);
     }
 });
 

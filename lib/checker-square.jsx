@@ -29,7 +29,7 @@ export default React.createClass({
     let arrowStyle = {
       width: this.props.size,
       height: this.props.size,
-      color: 'yellow',
+      color: this.props.highlight,
       backgroundColor: this.props.color,
       fontSize: '24pt',
       textAlign: 'center',

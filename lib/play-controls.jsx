@@ -1,36 +1,42 @@
 import React from 'react';
 //this syntax is called obejct destructing.
-import {Button, ButtonToolbar} from 'react-bootstrap'
+import {Panel, Button, ButtonToolbar, Glyphicon, Alert, Form, Input} from 'react-bootstrap'
 
 export default React.createClass({
-    getInitialState() {
-        return {};
-    },
+  getInitialState() {
+    return {};
+  },
 
-    render() {
-        return <ButtonToolbar>
-            <Button bsStyle="success" onClick={this.onPlay}>Play</Button>
-            <Button bsStyle="danger" onClick={this.onStop}>Stop</Button>
-            <Button bsStyle="primary" onClick={this.onReset}>Reset</Button>
-            <Button onClick={this.onSetSize}>Set Size</Button>
+  render() {
+    return (
+      <Panel>
+        <ButtonToolbar>
+          <Button bsStyle="success" onClick={this.onPlay}><Glyphicon
+            glyph='play' /> Play</Button>
+          <Button bsStyle="danger" onClick={this.onStop}><Glyphicon
+            glyph='stop' /> Stop</Button>
+          <Button bsStyle="primary" onClick={this.onReset}><Glyphicon
+            glyph='refresh' /> Reset</Button>
+          <Button onClick={this.onSetSize}>Set Size</Button>
         </ButtonToolbar>
-    },
+      </Panel>)
+  },
 
-    onPlay() {
-        this.props.control.play();
-    },
+  onPlay() {
+    this.props.control.play();
+  },
+  
 
+  onStop() {
+    this.props.control.stop();
+  },
+  
+  
+  onReset() {
+    this.props.control.reset();
+  },
 
-    onStop() {
-        this.props.control.stop();
-    },
-
-
-    onReset() {
-        this.props.control.reset();
-    },
-
-    onSetSize() {
-        this.props.control.setSize();
-    }
+  onSetSize() {
+    this.props.control.setSize();
+  }
 });

@@ -15,22 +15,29 @@ export default React.createClass({
     let squares = [];
     let key = 0;
     let color = null;
+    let highlight = null;
     let arrow = null;    
     for(let i = 0; i < this.props.size; i++) {
       for(let j = 0; j < this.props.size; j++) {
         key++;
         if (this.props.arrows != null){    
           arrow = this.props.arrows[i][j];
+          if (arrow === 'flag'){
+            highlight = '#FD5E66';
+          } else {
+            highlight = '#BABABA';
+          }
         }
-        color = key % 2 == 0 ? '#333333' : '#BBBBBB';          
+        color = key % 2 == 0 ? '#F7F7F7' : '#6B656E';          
         if (this.props.activeSquare != null &&
             i == this.props.activeSquare[0] &&
             j == this.props.activeSquare[1]){
-          color = '#FF0000';
+          color = '#FD5E66';
         }
         squares.push(<Square key={key} 
                              size={this.props.squareSize} 
-                             color={color} 
+                             color={color}
+                             highlight={highlight}
                              direction={arrow}/>);
       }
     }
