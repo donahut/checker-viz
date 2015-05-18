@@ -15,11 +15,12 @@ let Main = React.createClass({
 
     render() {
         return (<div>
-                <Controls control={this}/>
+                <Controls control={this} active={this.state.active}/>
                 <Board size={this.state.size} 
                 squareSize={this.state.squareSize}
-                arrows={this.state.arrows}
-                activeSquare={this.state.activeSquare} />
+                board={this.state.board}
+                activeSquare={this.state.activeSquare}
+                active={this.state.active}/>
                 </div>);
     },
 
@@ -28,23 +29,32 @@ let Main = React.createClass({
         return {
             size: size,
             squareSize: squareSize,
-            arrows: boardData[0],
+            board: boardData[0],
             activeSquare: boardData[1],
             previous: [],
+            active: false
         }; 
     },
 
     _initBoard(size, squareSize) {
-        let arrows = new Array(size);
+        let row = Math.floor((Math.random() * size));
+        let col = Math.floor((Math.random() * size));
+        let activeSquare = [row, col];
+        console.log("AS: " + [col, row]);
+
+        let key = 0;
+        let board = new Array(size);
         for (let i = 0; i < size; i++){
-            arrows[i] = new Array(size);
+            board[i] = new Array(size);
         }
 
         for(let i = 0; i < size; i++) {
             for(let j = 0; j < size; j++) {
+                let active = (i == row && j == col) ? true : false;
+                let color = key++ % 2 == 0 ? '#F7F7F7' : '#6B656E';          
+
                 let rand = Math.floor((Math.random() * 4) + 1);
                 let direction = null;
-                
                 switch(rand) {
                 case 1:
                     direction = 'arrow-up';
@@ -59,22 +69,23 @@ let Main = React.createClass({
                     direction = 'arrow-left';
                     break;
                 }
-                arrows[i][j] = direction;
+
+                board[i][j] = {
+                    glyph: direction,
+                    direction: direction,
+                    color: color,
+                    highlight: active ? '#92D18B' : '#BABABA'
+                };
             }
         }
-
-        let row = Math.floor((Math.random() * size));
-        let col = Math.floor((Math.random() * size));
-        let activeSquare = [row, col];
-        console.log("AS: " + [col, row]);
         
-        return [arrows, activeSquare];
+        return [board, activeSquare];
     },
 
     _tryMove() {
         let r = this.state.activeSquare[0];
         let c = this.state.activeSquare[1];
-        let direction = this.state.arrows[r][c];
+        let direction = this.state.board[r][c].direction;
 
         console.log('DIR: ' + direction);
         switch(direction) {
@@ -124,20 +135,24 @@ let Main = React.createClass({
 
     _move() {
         let possibleSquare = this._tryMove();
+        let r = this.state.activeSquare[0];
+        let c = this.state.activeSquare[1];
+        let pr = possibleSquare[0];
+        let pc = possibleSquare[1];
 
         if (!this._containsCycle(possibleSquare)){
+            this.state.board[r][c].glyph = 'repeat';
+            this.state.board[r][c].highlight = '#92D18B';
             return 'cycle';
         }
         if (this._checkSquare(possibleSquare)) {
             this.state.previous.push(this.state.activeSquare);
-            let arrows = this.state.arrows;
-            let r = this.state.activeSquare[0];
-            let c = this.state.activeSquare[1];
-            arrows[r][c] = 'flag';
-            this.state.arrows = arrows;
+            this.state.board[pr][pc].highlight = '#92D18B';
             this.state.activeSquare = possibleSquare;
             return 'move';
         } else { 
+            this.state.board[r][c].glyph = 'remove';
+            this.state.board[r][c].highlight = '#FD5E66';
             return 'off';
         }
     },
@@ -148,20 +163,31 @@ let Main = React.createClass({
         switch(result) {
         case 'cycle':
             this.stop();
-            alert('Checker has entered a cycle, it will never go off the board');
+            this.setState(this.state);
+            alert('Checker has entered a cycle, it will never go off the board.');
             break;
         case 'off':
             this.stop();
-            alert('The checker went off the board...  :(');
+            this.setState(this.state);
+            alert('The checker went off the board.');
             break;
         default:
             this.setState(this.state);
         }        
     },
 
+    _startGameLoop() {        
+        this.state.active = true;
+        this.state.gameLoop = setInterval(this._play, 2000);
+    },
+
     play() {        
         console.log("Play");
-        this.state.gameLoop = setInterval(this._play, 2000);
+        if (!this.state.active) {
+            this._startGameLoop();
+        } else {
+            console.log('Game in progress...');
+        }
     },
 
     stop() {

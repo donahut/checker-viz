@@ -8,10 +8,11 @@ export default React.createClass({
   },
 
   render() {
+    let disabled = this.props.active ? true : false;
     return (
       <Panel>
         <ButtonToolbar>
-          <Button bsStyle="success" onClick={this.onPlay}><Glyphicon
+          <Button bsStyle="success" onClick={this.onPlay} disabled={disabled}><Glyphicon
             glyph='play' /> Play</Button>
           <Button bsStyle="danger" onClick={this.onStop}><Glyphicon
             glyph='stop' /> Stop</Button>
@@ -19,7 +20,7 @@ export default React.createClass({
             glyph='refresh' /> Reset</Button>
           <Button onClick={this.onSetSize}>Set Size</Button>
         </ButtonToolbar>
-      </Panel>)
+      </Panel>);
   },
 
   onPlay() {

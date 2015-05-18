@@ -36,19 +36,14 @@ export default React.createClass({
       lineHeight: this.props.size + 'px'
     };
 
-    let direction = this.props.direction;
-
     //To set a div's class in React you must use the 'className' attribute, instead of the
     //usual 'class' attribute. This is because 'class' is a reserved keyword in ECMAScript 6.
-    if (this.props.direction != null) {
-      return <div className='square' ref='square' style={style}>
-          <div style={arrowStyle}>
-            <Glyphicon glyph={direction} />
-          </div>
-        </div>;
-    } else {
-      return <div className='square' ref='square' style={style} />;
-    }
+    return (
+      <div className='square' ref='square' style={style}>
+        <div style={arrowStyle}>
+          <Glyphicon glyph={this.props.glyph} />
+        </div>
+      </div>);
   },
 
   /**
