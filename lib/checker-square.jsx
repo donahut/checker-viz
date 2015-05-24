@@ -26,7 +26,7 @@ export default React.createClass({
       height: this.props.size,
     };
 
-    let glyphStyle = {
+    let squareStyle = {
       width: this.props.size,
       height: this.props.size,
       color: this.props.color,
@@ -40,7 +40,7 @@ export default React.createClass({
     //usual 'class' attribute. This is because 'class' is a reserved keyword in ECMAScript 6.
     return (
       <div className='square' ref='square' style={style}>
-        <div style={glyphStyle}>
+        <div style={squareStyle}>
           <Glyphicon glyph={this.props.glyph} />
         </div>
       </div>);

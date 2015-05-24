@@ -2,6 +2,7 @@
 import React from 'react';
 import Board from './checker-board';
 import Controls from './play-controls';
+import Alert from './alert';
 import Game from './game';
 
 //get the content DOMElemet create in index.html
@@ -16,10 +17,15 @@ let Main = React.createClass({
 
     render() {
         return (<div>
-                <Controls control={this} active={this.state.active}/>
+                <Controls control={this} 
+                          active={this.state.active}
+                          reset={this.state.gameOver} />
+                <Alert show={this.state.gameOver} 
+                       alert={this.state.alertInfo} />
                 <Board size={this.state.size} 
                        squareSize={this.state.squareSize}
-                       board={this.state.game.board} />
+                       board={this.state.game.board} 
+                       active={this.state.game.activeSquare}/>
                 </div>);
     },
 
@@ -29,7 +35,9 @@ let Main = React.createClass({
             size: size,
             squareSize: squareSize,
             game: game,
-            active: false
+            active: false,
+            gameOver: false,
+            alert: null
         }; 
     },
 
@@ -43,7 +51,9 @@ let Main = React.createClass({
             this.state.game.updateBoardModel(square, 'active');
         } else {
             this.state.game.updateBoardModel(this.state.game.activeSquare,
-                                             'end')
+                                             'end')            
+            this.state.alertInfo = this.state.game.getAlertInfo();
+            this.state.gameOver = true;
             this.stop();
         }
         this.setState(this.state);
@@ -77,9 +87,9 @@ let Main = React.createClass({
         this.setState(gameData);
     },
 
-    setSize() {
+    setSize(size) {
         //we update our internal state.
-        let gameData = this._initGame(7);
+        let gameData = this._initGame(size);
         //setting our state forces a rerender, which in turn will call the render() method
         //of this class. This is how everything gets redrawn and how you 'react' to user input
         //to change the state of the DOM.

@@ -13,13 +13,16 @@ export default React.createClass({
     
     //create a new array of squares
     let squares = [];
+    let activeSquare = this.props.active;
     for(let i = 0; i < this.props.size; i++) {
       for(let j = 0; j < this.props.size; j++) {
+        let active = (activeSquare[0] == i && activeSquare[1] == j);
         squares.push(<Square key={this.props.board[i][j].ref}
                              size={this.props.squareSize} 
                              color={this.props.board[i][j].color}
                              background={this.props.board[i][j].background}
-                             glyph={this.props.board[i][j].glyph}/>
+                             glyph={this.props.board[i][j].glyph}
+                             active={active}/>
         );
       }
     }
