@@ -13,15 +13,15 @@ export default React.createClass({
     
     //create a new array of squares
     let squares = [];
-    let activeSquare = this.props.active;
+    let activeSquare = this.props.game.activeSquare;
     for(let i = 0; i < this.props.size; i++) {
       for(let j = 0; j < this.props.size; j++) {
         let active = (activeSquare[0] == i && activeSquare[1] == j);
-        squares.push(<Square key={this.props.board[i][j].ref}
+        squares.push(<Square key={this.props.game.board[i][j].ref}
                              size={this.props.squareSize} 
-                             color={this.props.board[i][j].color}
-                             background={this.props.board[i][j].background}
-                             glyph={this.props.board[i][j].glyph}
+                             color={this.props.game.board[i][j].color}
+                             background={this.props.game.board[i][j].background}
+                             glyph={this.props.game.board[i][j].glyph}
                              active={active}/>
         );
       }
@@ -36,5 +36,22 @@ export default React.createClass({
         {squares}
       </div>
     );
+  },
+
+  componentDidUpdate() {
+    console.log('Board updated');
+    if (this.props.gameOver && this.props.game.endState != null) {
+      if (this.props.game.endState === 'cycle') {
+        let end = new Audio('./sounds/chime_bell_ding.wav'); 
+        end.play();
+      } else {
+        let end = new Audio('./sounds/chime_bell_dong.wav'); 
+        end.play();
+      }
+    } else if (this.props.active) {
+      let checker = new Audio('./sounds/pop_drip.wav'); 
+      checker.play();
+    }
   }
+
 });

@@ -24,8 +24,9 @@ let Main = React.createClass({
                        alert={this.state.alertInfo} />
                 <Board size={this.state.size} 
                        squareSize={this.state.squareSize}
-                       board={this.state.game.board} 
-                       active={this.state.game.activeSquare}/>
+                       game={this.state.game}
+                       active={this.state.active}
+                       gameOver={this.state.gameOver}/>
                 </div>);
     },
 
@@ -51,7 +52,7 @@ let Main = React.createClass({
             this.state.game.updateBoardModel(square, 'active');
         } else {
             this.state.game.updateBoardModel(this.state.game.activeSquare,
-                                             'end')            
+                                             'end');         
             this.state.alertInfo = this.state.game.getAlertInfo();
             this.state.gameOver = true;
             this.stop();

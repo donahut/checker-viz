@@ -40,18 +40,27 @@ export default React.createClass({
   },
 
   onPlay() {
+    let plink = new Audio('./sounds/click_04.wav'); 
+    plink.play();
     this.props.control.play();
   },
   
   onStop() {
+    let plink = new Audio('./sounds/click_04.wav'); 
+    plink.play();
+    plink.play();
     this.props.control.stop();
   },
   
   onReset() {
+    let plink = new Audio('./sounds/digi_plink.wav'); 
+    plink.play();
     this.props.control.reset();
   },
 
   onSetSize(e) {
+    let resize = new Audio('./sounds/pad_confirm_speedy_quiet_remix.wav'); 
+    resize.play();
     this.props.control.setSize(e);
   }
 });
