@@ -20,17 +20,17 @@ export default React.createClass({
     //this will set the CSS style of the div we're returning.
     //this.props are injected by the entity that instantiated
     //this react class.
+
     let style = {
       width: this.props.size,
       height: this.props.size,
-      backgroundColor: this.props.color
     };
 
-    let arrowStyle = {
+    let glyphStyle = {
       width: this.props.size,
       height: this.props.size,
-      color: this.props.highlight,
-      backgroundColor: this.props.color,
+      color: this.props.color,
+      backgroundColor: this.props.background,
       fontSize: '24pt',
       textAlign: 'center',
       lineHeight: this.props.size + 'px'
@@ -40,7 +40,7 @@ export default React.createClass({
     //usual 'class' attribute. This is because 'class' is a reserved keyword in ECMAScript 6.
     return (
       <div className='square' ref='square' style={style}>
-        <div style={arrowStyle}>
+        <div style={glyphStyle}>
           <Glyphicon glyph={this.props.glyph} />
         </div>
       </div>);
