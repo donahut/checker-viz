@@ -1,5 +1,4 @@
 import React from 'react';
-//this syntax is called obejct destructing.
 import {Alert} from 'react-bootstrap'
 
 export default React.createClass({
