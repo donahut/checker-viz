@@ -38,17 +38,17 @@ export default React.createClass({
     );
   },
 
+  // As the board is updated, play appropriate sounds
   componentDidUpdate() {
-    console.log('Board updated');
-    if (this.props.gameOver && this.props.game.endState != null) {
-      if (this.props.game.endState === 'cycle') {
+    if (this.props.gameOver && this.props.game.endState != null) {  // if game is over
+      if (this.props.game.endState === 'cycle') {  // if game ended in cycle
         let end = new Audio('./sounds/chime_bell_ding.wav'); 
         end.play();
-      } else {
+      } else {  // if game ended in checker moving off the board
         let end = new Audio('./sounds/chime_bell_dong.wav'); 
         end.play();
       }
-    } else if (this.props.active) {
+    } else if (this.props.active) {  // checker moving along path
       let checker = new Audio('./sounds/pop_drip.wav'); 
       checker.play();
     }

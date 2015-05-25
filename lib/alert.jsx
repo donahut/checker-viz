@@ -7,6 +7,12 @@ export default React.createClass({
     return {};
   },
 
+  /* 
+     Displays an alert that:
+     - notifys user game is over
+     - outcome of the game
+     - information to proceed
+   */
   render() {
     if (this.props.show) {
     return (

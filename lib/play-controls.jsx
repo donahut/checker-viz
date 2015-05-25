@@ -39,6 +39,10 @@ export default React.createClass({
       </Panel>);
   },
 
+  /*
+     Callbacks to control functions
+   */
+
   onPlay() {
     let plink = new Audio('./sounds/click_04.wav'); 
     plink.play();

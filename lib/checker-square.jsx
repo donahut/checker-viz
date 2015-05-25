@@ -21,11 +21,13 @@ export default React.createClass({
     //this.props are injected by the entity that instantiated
     //this react class.
 
+    // basic style of underlying board (for sizing)
     let style = {
       width: this.props.size,
       height: this.props.size,
     };
 
+    // style overlayed on top to display colors, glyphs (arrows, checker)
     let squareStyle = {
       width: this.props.size,
       height: this.props.size,

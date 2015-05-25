@@ -29,7 +29,8 @@ let Main = React.createClass({
                        gameOver={this.state.gameOver}/>
                 </div>);
     },
-
+    
+    // State/Game initialization
     _initGame(size, squareSize=this.props.squareSize) {
         let game = new Game(size);
         return {
@@ -41,16 +42,18 @@ let Main = React.createClass({
             alert: null
         }; 
     },
-
+    
+    // Visualize / playback the path solution
     _playback(pathItr) {
         console.log('Game loop active...');
         this.state.game.updateBoardModel(this.state.game.activeSquare,
                                          'path');
-        let step = pathItr.next();
-        if (!step.done) {
+        let step = pathItr.next();  // iterator will notify when path
+                                    // is complete
+        if (!step.done) { // if more steps on path
             let square = step.value.split(",");
             this.state.game.updateBoardModel(square, 'active');
-        } else {
+        } else { // if end of path
             this.state.game.updateBoardModel(this.state.game.activeSquare,
                                              'end');         
             this.state.alertInfo = this.state.game.getAlertInfo();
@@ -59,7 +62,8 @@ let Main = React.createClass({
         }
         this.setState(this.state);
     },
-
+    
+    // Solve for path and replay (square per second)
     _startGameLoop() {        
         this.state.active = true;
         let path = this.state.game.solve();
