@@ -23,4 +23,5 @@ Go to the project root and run `electron .`
 
 Go to the prject root and run `iojs bin/launch.js`.
 
-#### Originally part of a Jibo programming challenge
+----
+Originally part of a Jibo programming challenge
